@@ -1,0 +1,16 @@
+Applies to revision 105088 (current version as of 2020-07-13),
+properly fixes LOAD DATA LOCAL vulnerability.
+
+--- orig/vb_test.php	2020-05-18 10:39:52.000000000 +0200
++++ htdocs/vb_test.php	2020-07-02 08:35:34.854983544 +0200
+@@ -36,9 +36,9 @@ class DB
+ 	public static function fetch_db($host, $user, $password, $dbname)
+ 	{
+ 		//make sure this is off because allows mysql to do bad bad things
+-		ini_set('mysqli.allow_local_infile', 0);
+ 		global $db_connection_error;
+ 		$obj = @new mysqli($host, $user, $password, $dbname);
++		$obj->options(MYSQLI_OPT_LOCAL_INFILE, false);
+ 		if (mysqli_connect_errno())
+ 		{
+ 			$db_connection_error = mysqli_connect_error();
